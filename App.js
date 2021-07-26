@@ -8,13 +8,14 @@ export default function App() {
     fetchData();
   },[])
 
-  const newsURL = "http://phoneradar.com/wp-json/wp/v2/posts";
+  const newsURL = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=40a33e38941441608b99a34e7cee3160";
 
   const fetchData = async () => {
     try {
       const response = await fetch(newsURL);
-      const json=await response.json();
-      setNews(json);
+      const json= await response.json();
+      const newNews= await json.articles;
+      setNews(newNews);
       console.log(news);
     } catch (error) {
       console.log(error);
@@ -25,20 +26,20 @@ export default function App() {
     <View style={styles.container}>
       <FlatList
       data={news}
-        keyExtractor={(item,index)=>item.id}
+        keyExtractor={(item,index)=>item.title}
         renderItem={({item})=>{
           return(
             <TouchableOpacity style={styles.itemContainer}>
                 <View style={styles.item}>
                 <Image source={{
-                  uri:item.jetpack_featured_media_url,
+                  uri:item.urlToImage,
                   width:Dimensions.get('window').width-50,
                   height:300,
                 
                 }}
                 style={styles.img} />
                     <Text style={styles.text}>
-                      {item.title.rendered}
+                      {item.title}
                     </Text>
                   </View>
               </TouchableOpacity>
